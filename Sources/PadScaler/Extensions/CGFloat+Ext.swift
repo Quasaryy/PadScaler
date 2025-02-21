@@ -9,7 +9,6 @@
 
 import Foundation
 
-@MainActor
 public extension CGFloat {
     func adaptiveSize(smallPad: CGFloat, largePad: CGFloat) -> CGFloat {
         PadScaler.shared.adaptiveSize(phone: self, smallPad: smallPad, largePad: largePad)

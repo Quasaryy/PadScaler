@@ -9,7 +9,6 @@
 
 import Foundation
 
-@MainActor
 public extension Double {
     func adaptiveSize(smallPad: CGFloat, largePad: CGFloat) -> CGFloat {
         CGFloat(self).adaptiveSize(smallPad: smallPad, largePad: largePad)

@@ -9,19 +9,19 @@
 
 import Foundation
 
-@MainActor
 public protocol DeviceSizeScaling {
     func scaledSize(_ baseValue: CGFloat, customSmallPadMultiplier: CGFloat?, customLargePadMultiplier: CGFloat?) -> CGFloat
     func adaptiveSize(phone: CGFloat, smallPad: CGFloat, largePad: CGFloat) -> CGFloat
 }
 
-@MainActor
 public final class DeviceSizeScaler: DeviceSizeScaling {
-    private let deviceDetector: DeviceTypeDetecting
+    private let isPad: Bool
+    private let isSmallPad: Bool
     private let configuration: ScalingConfiguration
     
-    public init(deviceDetector: DeviceTypeDetecting, configuration: ScalingConfiguration) {
-        self.deviceDetector = deviceDetector
+    public init(isPad: Bool, isSmallPad: Bool, configuration: ScalingConfiguration) {
+        self.isPad = isPad
+        self.isSmallPad = isSmallPad
         self.configuration = configuration
     }
     
@@ -30,14 +30,14 @@ public final class DeviceSizeScaler: DeviceSizeScaling {
         let smallPadMultiplier = customSmallPadMultiplier ??
             (configuration.defaultSmallPadMultiplier / configuration.defaultLargePadMultiplier) * largePadMultiplier
         
-        return deviceDetector.isPad ?
-            (deviceDetector.isSmallPad ? baseValue * smallPadMultiplier : baseValue * largePadMultiplier) :
+        return isPad ?
+            (isSmallPad ? baseValue * smallPadMultiplier : baseValue * largePadMultiplier) :
             baseValue
     }
     
     public func adaptiveSize(phone: CGFloat, smallPad: CGFloat, largePad: CGFloat) -> CGFloat {
-        deviceDetector.isPad ?
-            (deviceDetector.isSmallPad ? smallPad : largePad) :
+        isPad ?
+            (isSmallPad ? smallPad : largePad) :
             phone
     }
 }

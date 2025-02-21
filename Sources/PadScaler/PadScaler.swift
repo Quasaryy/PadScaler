@@ -9,28 +9,21 @@
 
 import Foundation
 
-@MainActor
 public final class PadScaler {
     internal static var shared = PadScaler(configuration: .default)
     
     private var configuration: ScalingConfiguration
-    private var deviceDetector: DeviceTypeDetecting
     private var sizeScaler: DeviceSizeScaling
     
     private init(configuration: ScalingConfiguration) {
         self.configuration = configuration
-        self.deviceDetector = DeviceTypeDetector(configuration: configuration)
-        self.sizeScaler = DeviceSizeScaler(deviceDetector: deviceDetector, configuration: configuration)
-    }
-    
-    internal init(
-        configuration: ScalingConfiguration,
-        deviceDetector: DeviceTypeDetecting,
-        sizeScaler: DeviceSizeScaling
-    ) {
-        self.configuration = configuration
-        self.deviceDetector = deviceDetector
-        self.sizeScaler = sizeScaler
+        
+        let (isPad, isSmallPad) = MainActor.assumeIsolated {
+            let detector = DeviceTypeDetector(configuration: configuration)
+            return (detector.isPad, detector.isSmallPad)
+        }
+        
+        self.sizeScaler = DeviceSizeScaler(isPad: isPad, isSmallPad: isSmallPad, configuration: configuration)
     }
     
     // MARK: - Public API
@@ -47,13 +40,12 @@ public final class PadScaler {
     }
     
     public static func newInstance(_ config: ScalingConfiguration) -> PadScaler {
-        return PadScaler(configuration: config)
+        PadScaler(configuration: config)
     }
     
 }
 
 // MARK: - Global Functions
-@MainActor
 public func adaptiveSize(phone: CGFloat, smallPad: CGFloat, largePad: CGFloat) -> CGFloat {
     PadScaler.shared.adaptiveSize(phone: phone, smallPad: smallPad, largePad: largePad)
 }
