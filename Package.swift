@@ -22,5 +22,9 @@ let package = Package(
                 .define("DEBUG", .when(configuration: .debug))
             ]
         ),
+        .testTarget(
+            name: "PadScalerTests",
+            dependencies: ["PadScaler"]
+        ),
     ]
 )

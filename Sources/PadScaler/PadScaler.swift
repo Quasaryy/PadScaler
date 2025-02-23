@@ -26,6 +26,13 @@ public final class PadScaler {
         self.sizeScaler = DeviceSizeScaler(isPad: isPad, isSmallPad: isSmallPad, configuration: configuration)
     }
     
+    @MainActor
+    internal init(configuration: ScalingConfiguration, deviceDetector: DeviceTypeDetecting) {
+        self.configuration = configuration
+        let (isPad, isSmallPad) = (deviceDetector.isPad, deviceDetector.isSmallPad)
+        self.sizeScaler = DeviceSizeScaler(isPad: isPad, isSmallPad: isSmallPad, configuration: configuration)
+    }
+    
     // MARK: - Public API
     public func scaledSize(_ baseValue: CGFloat, customSmallPadMultiplier: CGFloat? = nil, customLargePadMultiplier: CGFloat? = nil) -> CGFloat {
         sizeScaler.scaledSize(baseValue, customSmallPadMultiplier: customSmallPadMultiplier, customLargePadMultiplier: customLargePadMultiplier)
