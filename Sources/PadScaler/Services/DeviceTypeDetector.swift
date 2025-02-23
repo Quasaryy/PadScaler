@@ -44,7 +44,7 @@ public final class DeviceTypeDetector: DeviceTypeDetecting {
     private func calculateIsSmallPad() -> Bool {
         let screenSize = UIScreen.main.nativeBounds
         let scale = UIScreen.main.nativeScale
-        guard scale != 0 else { return false }
+        guard scale > 0 else { return false }
         
         let screenDiagonalPixels = sqrt(pow(screenSize.width, 2) + pow(screenSize.height, 2))
         let screenDiagonalPoints = screenDiagonalPixels / scale

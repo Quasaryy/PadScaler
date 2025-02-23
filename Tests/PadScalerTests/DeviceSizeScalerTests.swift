@@ -106,4 +106,24 @@ final class DeviceSizeScalerTests: XCTestCase {
             )
         }
     }
+    
+    func testAdaptiveSizeWithNegativeValues() {
+        // Arrange
+        let scaler = DeviceSizeScaler(isPad: true, isSmallPad: true, configuration: .default)
+        
+        // Act
+        let result = scaler.adaptiveSize(phone: -10, smallPad: -20, largePad: -30)
+        
+        // Assert
+        XCTAssertEqual(result, -20, "Should return a negative value for smallPad")
+        
+        // Arrange
+        let largeScaler = DeviceSizeScaler(isPad: true, isSmallPad: false, configuration: .default)
+        
+        // Act
+        let largeResult = largeScaler.adaptiveSize(phone: -10, smallPad: -20, largePad: -30)
+        
+        // Assert
+        XCTAssertEqual(largeResult, -30, "Should return a negative value for largePad")
+    }
 }

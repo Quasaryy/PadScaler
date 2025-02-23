@@ -10,6 +10,9 @@
 import Foundation
 
 public extension Double {
+    /// Attention!
+    /// Swift parses `-1.adaptiveSize(...)` as `-(1.adaptiveSize(...))`, which may lead to an unexpected sign change.
+    /// To avoid this, always use parentheses: `(-1).adaptiveSize(...)`.
     func adaptiveSize(smallPad: CGFloat, largePad: CGFloat) -> CGFloat {
         CGFloat(self).adaptiveSize(smallPad: smallPad, largePad: largePad)
     }
